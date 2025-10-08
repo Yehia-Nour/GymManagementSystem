@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace GymManagement.DAL.Entities
 {
-    //[Owned]
     public class Address
     {
         public int BuildingNumber { get; set; }

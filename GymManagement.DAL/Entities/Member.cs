@@ -10,7 +10,7 @@ namespace GymManagement.DAL.Entities
     {
         public string? Photo { get; set; }
 
-        #region RelationShips
+        #region Relationships
 
         #region Member - HealthRecord
 
