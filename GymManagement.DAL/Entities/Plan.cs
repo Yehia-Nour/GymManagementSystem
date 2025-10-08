@@ -13,5 +13,8 @@ namespace GymManagement.DAL.Entities
         public int DurationDays { get; set; }
         public decimal Price { get; set; }
         public bool IsActive { get; set; }
+
+        public ICollection<MemberShip> MemberShips { get; set; } = null!;
+
     }
 }
