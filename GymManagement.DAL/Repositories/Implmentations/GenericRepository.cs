@@ -19,7 +19,13 @@ namespace GymManagement.DAL.Repositories.Implmentations
             _dbContext = dbContext;
         }
 
-        public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>().AsNoTracking().ToList();
+        public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
+        {
+            if (condition is null)
+                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+
+            return _dbContext.Set<TEntity>().AsNoTracking().Where(condition).ToList();
+        }
 
         public TEntity? GetById(int id) => _dbContext.Set<TEntity>().Find(id);
 
