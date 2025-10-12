@@ -1,5 +1,5 @@
 ﻿using GymManagement.BLL.Services.Interfaces;
-using GymManagement.BLL.ViewModels.MemberViewModel;
+using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
@@ -105,10 +105,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 _unitOfWork.GetRepository<Member>().Add(member);
                 return _unitOfWork.SaveChanges() > 0;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
 
         public MembeToUpdaterViewModel? GetMemberToUpdate(int id)
@@ -155,10 +152,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 memberRepo.Update(member);
                 return _unitOfWork.SaveChanges() > 0;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
 
         public bool DeleteMember(int id)
@@ -186,10 +180,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 memberRepo.Delete(member);
                 return _unitOfWork.SaveChanges() > 0;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
 
         public HealthRecordViewModel? GetMemberHealthRecordDetials(int id)
