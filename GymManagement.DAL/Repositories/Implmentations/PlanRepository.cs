@@ -1,6 +1,7 @@
 ﻿using GymManagement.DAL.Data.Context;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,34 +19,13 @@ namespace GymManagement.DAL.Repositories.Implmentations
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Plan> GetAll()
-        {
-            return _dbContext.Plans.ToList();
-        }
+        public IEnumerable<Plan> GetAll() => _dbContext.Plans.AsNoTracking().ToList();
 
-        public Plan? GetById(int id)
-        {
-            return _dbContext.Plans.Find(id);
-        }
-
-        public int Add(Plan plan)
-        {
-            _dbContext.Plans.Add(plan);
-            return _dbContext.SaveChanges();
-        }
+        public Plan? GetById(int id) => _dbContext.Plans.Find(id);
 
         public int Update(Plan plan)
         {
             _dbContext.Plans.Update(plan);
-            return _dbContext.SaveChanges();
-        }
-
-        public int Delete(int id)
-        {
-            var plan = GetById(id);
-            if (plan != null)
-                _dbContext.Plans.Remove(plan);
-
             return _dbContext.SaveChanges();
         }
     }

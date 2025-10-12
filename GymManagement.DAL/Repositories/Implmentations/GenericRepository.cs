@@ -10,42 +10,34 @@ using System.Threading.Tasks;
 
 namespace GymManagement.DAL.Repositories.Implmentations
 {
-    public class MemberRepository : IMemberRepository
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity, new()
     {
         private readonly GymDbContext _dbContext;
-        public MemberRepository(GymDbContext dbContext)
+
+        public GenericRepository(GymDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Member> GetAll()
-        {
-            return _dbContext.Members.ToList();
-        }
+        public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>().AsNoTracking().ToList();
 
-        public Member? GetById(int id)
-        {
-            return _dbContext.Members.Find(id);
-        }
+        public TEntity? GetById(int id) => _dbContext.Set<TEntity>().Find(id);
 
-        public int Add(Member member)
+        public int Add(TEntity entity)
         {
-            _dbContext.Members.Add(member);
+            _dbContext.Set<TEntity>().Add(entity);
             return _dbContext.SaveChanges();
         }
 
-        public int Update(Member member)
+        public int Update(TEntity entity)
         {
-            _dbContext.Members.Update(member);
+            _dbContext.Set<TEntity>().Update(entity);
             return _dbContext.SaveChanges();
         }
 
-        public int Delete(int id)
+        public int Delete(TEntity entity)
         {
-            var member = GetById(id);
-            if (member != null)
-                _dbContext.Members.Remove(member);
-
+            _dbContext.Set<TEntity>().Remove(entity);
             return _dbContext.SaveChanges();
         }
     }
