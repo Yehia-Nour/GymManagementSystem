@@ -14,10 +14,16 @@ namespace GymManagement.BLL.Services.Implmentations
     public class MemberService : IMemberService
     {
         private readonly IGenericRepository<Member> _memberRepository;
+        private readonly IGenericRepository<MemberShip> _emberShipRepository;
+        private readonly IPlanRepository _planRepository;
 
-        public MemberService(IGenericRepository<Member> memberRepository)
+        public MemberService(IGenericRepository<Member> memberRepository,
+            IGenericRepository<MemberShip> emberShipRepository,
+            IPlanRepository planRepository)
         {
             _memberRepository = memberRepository;
+            _emberShipRepository = emberShipRepository;
+            _planRepository = planRepository;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -37,6 +43,35 @@ namespace GymManagement.BLL.Services.Implmentations
             });
 
             return memberViewModels;
+        }
+
+        public MemberViewModel? GetMemberDetials(int id)
+        {
+            var member = _memberRepository.GetById(id);
+            if (member == null)
+                return null;
+
+            var viewModel = new MemberViewModel
+            {
+                Name = member.Name,
+                Email = member.Email,
+                Phone = member.Phone,
+                Photo = member.Photo,
+                Gender = member.Gender.ToString(),
+                DateOfBirth = member.DateOfBirth.ToShortDateString(),
+                Address = $"{member.Address.BuildingNumber} - {member.Address.Street} - {member.Address.City}"
+            };
+
+            var activeMemberShip = _emberShipRepository.GetAll(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefault();
+            if (activeMemberShip is not null)
+            {
+                viewModel.MemberShipStartDate = activeMemberShip.CreatedAt.ToShortDateString();
+                viewModel.MemberShipEndDate = activeMemberShip.EndDate.ToShortDateString();
+                var plan = _planRepository.GetById(activeMemberShip.PlanId);
+                viewModel.PlanName = plan?.Name;
+            }
+
+            return viewModel;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -78,7 +113,5 @@ namespace GymManagement.BLL.Services.Implmentations
                 return false;
             }
         }
-
-
     }
 }
