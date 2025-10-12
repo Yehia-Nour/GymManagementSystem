@@ -15,19 +15,22 @@ namespace GymManagement.BLL.Services.Implmentations
     public class MemberService : IMemberService
     {
         private readonly IGenericRepository<Member> _memberRepository;
-        private readonly IGenericRepository<MemberShip> _emberShipRepository;
+        private readonly IGenericRepository<MemberShip> _memberShipRepository;
         private readonly IPlanRepository _planRepository;
         private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
+        private readonly IGenericRepository<MemberSession> _memberSessionRepository;
 
         public MemberService(IGenericRepository<Member> memberRepository,
             IGenericRepository<MemberShip> emberShipRepository,
             IPlanRepository planRepository,
-            IGenericRepository<HealthRecord> healthRecordRepository)
+            IGenericRepository<HealthRecord> healthRecordRepository,
+            IGenericRepository<MemberSession> memberSessionRepository)
         {
             _memberRepository = memberRepository;
-            _emberShipRepository = emberShipRepository;
+            _memberShipRepository = emberShipRepository;
             _planRepository = planRepository;
             _healthRecordRepository = healthRecordRepository;
+            _memberSessionRepository = memberSessionRepository;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -66,7 +69,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 Address = $"{member.Address.BuildingNumber} - {member.Address.Street} - {member.Address.City}"
             };
 
-            var activeMemberShip = _emberShipRepository.GetAll(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefault();
+            var activeMemberShip = _memberShipRepository.GetAll(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefault();
             if (activeMemberShip is not null)
             {
                 viewModel.MemberShipStartDate = activeMemberShip.CreatedAt.ToShortDateString();
@@ -158,6 +161,34 @@ namespace GymManagement.BLL.Services.Implmentations
                 member.UpdatedAt = DateTime.Now;
 
                 return _memberRepository.Update(member) > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteMember(int id)
+        {
+            try
+            {
+                var member = _memberRepository.GetById(id);
+                if (member is null)
+                    return false;
+
+                var hasActiveMemberSession = _memberSessionRepository
+                    .GetAll(ms => ms.MemberId == id && ms.Session.StartDate > DateTime.Now).Any();
+                if (hasActiveMemberSession)
+                    return false;
+
+                var memberShips = _memberShipRepository.GetAll(ms => ms.MemberId == id);
+                if (memberShips.Any())
+                {
+                    foreach (var membership in memberShips)
+                        _memberShipRepository.Delete(membership);
+                }
+
+                return _memberRepository.Delete(member) > 0;
             }
             catch
             {
