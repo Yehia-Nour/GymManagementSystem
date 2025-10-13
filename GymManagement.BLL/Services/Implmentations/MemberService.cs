@@ -3,7 +3,7 @@ using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
-using GymManagement.DAL.Repositories.UnitOfWork.Interfaces;
+using GymManagement.DAL.UnitOfWork.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,9 +75,7 @@ namespace GymManagement.BLL.Services.Implmentations
             try
             {
                 var emailExists = IsEmailExists(createMember.Email);
-
                 var phoneExists = IsPhoneExists(createMember.Phone);
-
                 if (emailExists || phoneExists)
                     return false;
 
@@ -108,13 +106,13 @@ namespace GymManagement.BLL.Services.Implmentations
             catch { return false; }
         }
 
-        public MembeToUpdaterViewModel? GetMemberToUpdate(int id)
+        public MemberToUpdaterViewModel? GetMemberToUpdate(int id)
         {
             var member = _unitOfWork.GetRepository<Member>().GetById(id);
             if (member is null)
                 return null;
 
-            return new MembeToUpdaterViewModel
+            return new MemberToUpdaterViewModel
             {
                 Photo = member.Photo,
                 Name = member.Name,
@@ -125,13 +123,13 @@ namespace GymManagement.BLL.Services.Implmentations
             };
         }
 
-        public bool UpdateMemberDetials(int id, MembeToUpdaterViewModel membeToUpdater)
+        public bool UpdateMemberDetials(int id, MemberToUpdaterViewModel memberToUpdater)
         {
             try
             {
-                var emailExists = IsEmailExists(membeToUpdater.Email);
+                var emailExists = IsEmailExists(memberToUpdater.Email);
 
-                var phoneExists = IsPhoneExists(membeToUpdater.Phone);
+                var phoneExists = IsPhoneExists(memberToUpdater.Phone);
 
                 if (emailExists || phoneExists)
                     return false;
@@ -142,11 +140,11 @@ namespace GymManagement.BLL.Services.Implmentations
                 if (member is null)
                     return false;
 
-                member.Email = membeToUpdater.Email;
-                member.Phone = membeToUpdater.Phone;
-                member.Address.BuildingNumber = membeToUpdater.BuildingNumber;
-                member.Address.Street = membeToUpdater.Street;
-                member.Address.City = membeToUpdater.City;
+                member.Email = memberToUpdater.Email;
+                member.Phone = memberToUpdater.Phone;
+                member.Address.BuildingNumber = memberToUpdater.BuildingNumber;
+                member.Address.Street = memberToUpdater.Street;
+                member.Address.City = memberToUpdater.City;
                 member.UpdatedAt = DateTime.Now;
 
                 memberRepo.Update(member);

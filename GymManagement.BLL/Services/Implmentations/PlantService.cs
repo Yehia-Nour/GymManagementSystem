@@ -1,7 +1,7 @@
 ﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.DAL.Entities;
-using GymManagement.DAL.Repositories.UnitOfWork.Interfaces;
+using GymManagement.DAL.UnitOfWork.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
