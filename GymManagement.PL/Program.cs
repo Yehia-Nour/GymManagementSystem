@@ -1,8 +1,8 @@
 using GymManagement.DAL.Data.Context;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
-using GymManagement.DAL.Repositories.UnitOfWork.Implmentations;
-using GymManagement.DAL.Repositories.UnitOfWork.Interfaces;
+using GymManagement.DAL.UnitOfWork.Implmentations;
+using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.PL

@@ -6,13 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagement.BLL.ViewModels.MemberViewModel
+namespace GymManagement.BLL.ViewModels.MemberViewModels
 {
-    public class CreateMemberViewModel
+    public class MemberToUpdaterViewModel
     {
-        [Required(ErrorMessage = "Name is Required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Name Must be Between 2 and 50 Char")]
-        [RegularExpression(@"^[a-z A-Z\s]+$", ErrorMessage = "Name Can Contain Only Letters")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Email is Required")]
@@ -27,13 +24,6 @@ namespace GymManagement.BLL.ViewModels.MemberViewModel
         [RegularExpression(@"^(010|011|012|015)\d{8}$", ErrorMessage = "Phone Number Must be Valid Egyption Phone Number")]
         public string Phone { get; set; } = null!;
 
-        [Required(ErrorMessage = "Date of Birth is Required")]
-        [DataType(DataType.Date)]
-        public DateOnly DateOfBirth { get; set; }
-
-        [Required(ErrorMessage = "Gender is Required")]
-        public Gender Gender { get; set; }
-
         [Required(ErrorMessage = "Building Number is Required")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "BuildingNumber Must be Between 1 and 1000")]
         public int BuildingNumber { get; set; }
@@ -47,7 +37,6 @@ namespace GymManagement.BLL.ViewModels.MemberViewModel
         [RegularExpression(@"^[a-z A-Z\s]+$", ErrorMessage = "City Can Contain Only Letters")]
         public string City { get; set; } = null!;
 
-        [Required(ErrorMessage = "Health Record is Required")]
-        public HealthRecordViewModel HealthRecordViewModel { get; set; } = null!;
+        public string? Photo { get; set; }
     }
 }

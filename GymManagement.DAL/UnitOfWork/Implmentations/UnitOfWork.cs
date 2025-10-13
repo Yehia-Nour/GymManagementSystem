@@ -2,14 +2,14 @@
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
-using GymManagement.DAL.Repositories.UnitOfWork.Interfaces;
+using GymManagement.DAL.UnitOfWork.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagement.DAL.Repositories.UnitOfWork.Implmentations
+namespace GymManagement.DAL.UnitOfWork.Implmentations
 {
     public class UnitOfWork : IUnitOfWork
     {
