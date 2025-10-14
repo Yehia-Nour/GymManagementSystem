@@ -39,7 +39,5 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
 
         [Required(ErrorMessage = "Specializations is Required")]
         public Specialties Specialties { get; set; }
-
-        public string? SpecialtiesToView { get; set; }
     }
 }
