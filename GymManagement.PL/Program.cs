@@ -23,7 +23,10 @@ namespace GymManagement.PL
             });
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
             var app = builder.Build();
 

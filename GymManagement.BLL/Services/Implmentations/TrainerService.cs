@@ -100,7 +100,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 BuildingNumber = trainer.Address.BuildingNumber,
                 Street = trainer.Address.Street,
                 City = trainer.Address.City,
-                SpecialtiesToView = trainer.Specialties.ToString()
+                Specialties = trainer.Specialties
             };
 
             return trainerToUpdate;
