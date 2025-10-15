@@ -42,7 +42,7 @@ namespace GymManagement.BLL.MappingProfiles
 
             CreateMap<MemberToUpdaterViewModel, Member>()
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
-                .ForMember(dest => dest.Email, opt => opt.Ignore())
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForPath(dest => dest.Address.BuildingNumber, opt => opt.MapFrom(src => src.BuildingNumber))
                 .ForPath(dest => dest.Address.Street, opt => opt.MapFrom(src => src.Street))
                 .ForPath(dest => dest.Address.City, opt => opt.MapFrom(src => src.City));
