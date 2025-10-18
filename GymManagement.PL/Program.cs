@@ -1,3 +1,5 @@
+using GymManagement.BLL.Services.Implmentations;
+using GymManagement.BLL.Services.Interfaces;
 using GymManagement.DAL.Data.Context;
 using GymManagement.DAL.DataSeed;
 using GymManagement.DAL.Repositories.Implmentations;
@@ -26,6 +28,8 @@ namespace GymManagement.PL
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+
 
 
             var app = builder.Build();
