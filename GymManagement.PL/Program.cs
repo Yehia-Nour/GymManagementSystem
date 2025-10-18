@@ -1,4 +1,7 @@
+using GymManagement.BLL.Services.Implmentations;
+using GymManagement.BLL.Services.Interfaces;
 using GymManagement.DAL.Data.Context;
+using GymManagement.DAL.DataSeed;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
 using GymManagement.DAL.UnitOfWork.Implmentations;
@@ -22,9 +25,23 @@ namespace GymManagement.PL
             });
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+
+
 
             var app = builder.Build();
+
+
+            using var scoped = app.Services.CreateScope();
+            var dbContext = scoped.ServiceProvider.GetRequiredService<GymDbContext>();
+            var pendingMigrations = dbContext.Database.GetPendingMigrations();
+            if (pendingMigrations?.Any() ?? false)
+                dbContext.Database.Migrate();
+            GymDbContextDataSeeding.SeedDate(dbContext);
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

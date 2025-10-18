@@ -12,7 +12,7 @@ namespace GymManagement.DAL.Repositories.Implmentations
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity, new()
     {
-        private readonly GymDbContext _dbContext;
+        protected readonly GymDbContext _dbContext;
 
         public GenericRepository(GymDbContext dbContext)
         {
