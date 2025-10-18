@@ -31,13 +31,8 @@ namespace GymManagement.BLL.Services.Implmentations
 
             var sessionViewModels = _mapper.Map<IEnumerable<SessionViewModel>>(sessions);
 
-            foreach (var viewModel in sessionViewModels)
-            {
-                var bookedCount = _unitOfWork.SessionRepository.GetCountOfBookedSlots(viewModel.Id);
-
-                var originalSession = sessions.First(s => s.Id == viewModel.Id);
-                viewModel.AvailableSlots = originalSession.Capacity - bookedCount;
-            }
+            foreach (var session in sessionViewModels)
+                session.AvailableSlots = session.Capacity - _unitOfWork.SessionRepository.GetCountOfBookedSlots(session.Id);
 
             return sessionViewModels;
         }
