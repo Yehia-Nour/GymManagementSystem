@@ -1,5 +1,4 @@
-﻿@using GymManagement.BLL.ViewModels.MemberViewModels
-@model IEnumerable<MemberViewModel>
+﻿@model IEnumerable<MemberViewModel>
 
 
 <!--<div id="Alert" class="alert alert-success alert-dismissible fade show">
@@ -67,7 +66,7 @@
                                     <ul class="dropdown-menu dropdown-menu-start"
                                         aria-labelledby="dropdownMenuButton-@member.Id">
                                         <li>
-                                            <a href="\Member\MemberDetails\memberId"
+                                            <a asp-controller="Member" asp-action="MemberDetails" asp-route-id="@member.Id"
                                                class="dropdown-item d-flex align-items-center gap-3">
                                                 <img src="~/images/info 1.jpg" alt="info icon"
                                                      style="width: 20px; height: 20px;" />
