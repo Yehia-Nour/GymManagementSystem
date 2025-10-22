@@ -94,7 +94,6 @@ namespace GymManagement.PL.Controllers
 
             return View(member);
         }
-
         [HttpPost]
         public ActionResult MemberEdit([FromRoute]int id, MemberToUpdaterViewModel editMember)
         {
@@ -106,6 +105,38 @@ namespace GymManagement.PL.Controllers
                 TempData["SuccessMessage"] = "Member Updated Successfuly";
             else
                 TempData["ErrorMessage"] = "Member Failed to Update, Check Phone and Email";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Id of Member Can't be 0 or Nigative Number";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var member = _memberService.GetMemberToUpdate(id);
+            if (member is null)
+            {
+                TempData["ErrorMessage"] = "Member Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.MemberId = id;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteConfirm(int id)
+        {
+            var result = _memberService.DeleteMember(id);
+
+            if (result)
+                TempData["SuccessMessage"] = "Member Deleted Successfuly";
+            else
+                TempData["ErrorMessage"] = "Member Failed to Delete";
 
             return RedirectToAction(nameof(Index));
         }
