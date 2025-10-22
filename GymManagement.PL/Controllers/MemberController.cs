@@ -68,11 +68,44 @@ namespace GymManagement.PL.Controllers
                 return View(nameof(Create), createMember);
             }
 
-            bool reault = _memberService.CreateMember(createMember);
-            if (reault)
+            bool result = _memberService.CreateMember(createMember);
+            if (result)
                 TempData["SuccessMessage"] = "Member Created Successfuly";
             else
                 TempData["ErrorMessage"] = "Member Failed to Create, Check Phone and Email";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult MemberEdit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Id of Member Can't be 0 or Nigative Number";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var member = _memberService.GetMemberToUpdate(id);
+            if (member is null)
+            {
+                TempData["ErrorMessage"] = "Member Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(member);
+        }
+
+        [HttpPost]
+        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdaterViewModel editMember)
+        {
+            if (!ModelState.IsValid)
+                return View(editMember);
+
+            var result = _memberService.UpdateMemberDetials(id, editMember);
+            if (result)
+                TempData["SuccessMessage"] = "Member Updated Successfuly";
+            else
+                TempData["ErrorMessage"] = "Member Failed to Update, Check Phone and Email";
 
             return RedirectToAction(nameof(Index));
         }

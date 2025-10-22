@@ -4,7 +4,7 @@
     <h3 class="text-primary-color">Add Member</h3>
 </header>
 
-@Html.ValidationMessage("DataInvaild", new {@class = "text-danger"});
+@Html.ValidationMessage("DataInvaild", new { @class = "text-danger" });
 
 <form asp-action="CreateMember" method="post">
 
@@ -140,3 +140,8 @@
     </footer>
 
 </form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"></partial>
+}
