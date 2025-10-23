@@ -61,7 +61,7 @@ namespace GymManagement.BLL.Services.Implmentations
             catch { return false; }
         }
 
-        public TrainerToUpdaterViewModel? GetMemberToUpdate(int id)
+        public TrainerToUpdaterViewModel? GetTrainerToUpdate(int id)
         {
             var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
             if (trainer is null)

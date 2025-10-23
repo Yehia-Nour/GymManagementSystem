@@ -7,8 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
-
-@if (TempData["ErrorMessage"] is not null)
+else if (TempData["ErrorMessage"] is not null)
 {
     <div id="Alert" class="alert alert-danger alert-dismissible fade show">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
