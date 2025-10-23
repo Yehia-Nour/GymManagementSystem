@@ -35,7 +35,7 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
         public Gender Gender { get; set; }
 
         [Required(ErrorMessage = "Building Number is Required")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "BuildingNumber Must be Between 1 and 1000")]
+        [Range(1, 1000, ErrorMessage = "Building Number Must be Between 1 and 1000")]
         public int BuildingNumber { get; set; }
 
         [Required(ErrorMessage = "Street is Required")]

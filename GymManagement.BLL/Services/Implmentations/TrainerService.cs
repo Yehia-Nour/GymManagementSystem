@@ -61,7 +61,7 @@ namespace GymManagement.BLL.Services.Implmentations
             catch { return false; }
         }
 
-        public TrainerToUpdaterViewModel? GetMemberToUpdate(int id)
+        public TrainerToUpdaterViewModel? GetTrainerToUpdate(int id)
         {
             var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
             if (trainer is null)
@@ -76,8 +76,11 @@ namespace GymManagement.BLL.Services.Implmentations
         {
             try
             {
-                var emailExists = IsEmailExists(trainerToUpdate.Email);
-                var phoneExists = IsPhoneExists(trainerToUpdate.Phone);
+                var emailExists = _unitOfWork.GetRepository<Trainer>()
+                    .GetAll(t => t.Email == trainerToUpdate.Email && t.Id != id).Any();
+
+                var phoneExists = _unitOfWork.GetRepository<Trainer>()
+                    .GetAll(t => t.Phone == trainerToUpdate.Phone && t.Id != id).Any();
                 if (emailExists || phoneExists)
                     return false;
 

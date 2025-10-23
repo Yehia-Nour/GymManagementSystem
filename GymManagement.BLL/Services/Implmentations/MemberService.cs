@@ -88,9 +88,11 @@ namespace GymManagement.BLL.Services.Implmentations
         {
             try
             {
-                var emailExists = IsEmailExists(memberToUpdater.Email);
+                var emailExists = _unitOfWork.GetRepository<Member>()
+                    .GetAll(m => m.Email == memberToUpdater.Email && m.Id != id).Any();
 
-                var phoneExists = IsPhoneExists(memberToUpdater.Phone);
+                var phoneExists = _unitOfWork.GetRepository<Member>()
+                    .GetAll(m => m.Phone == memberToUpdater.Phone && m.Id != id).Any();
 
                 if (emailExists || phoneExists)
                     return false;
@@ -119,8 +121,11 @@ namespace GymManagement.BLL.Services.Implmentations
                 if (member is null)
                     return false;
 
-                var hasActiveMemberSession = _unitOfWork.GetRepository<MemberSession>()
-                    .GetAll(ms => ms.MemberId == id && ms.Session.StartDate > DateTime.Now).Any();
+                var sessionIds = _unitOfWork.GetRepository<MemberSession>()
+                    .GetAll(ms => ms.MemberId == id).Select(ms => ms.SessionId);
+
+                var hasActiveMemberSession = _unitOfWork.GetRepository<Session>()
+                    .GetAll(s => sessionIds.Contains(s.Id) && s.StartDate > DateTime.Now).Any();
                 if (hasActiveMemberSession)
                     return false;
 

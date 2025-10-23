@@ -15,7 +15,7 @@ namespace GymManagement.BLL.MappingProfiles
         {
             CreateMap<Plan, PlanViewModel>();
 
-            CreateMap<Plan, UpdatePlanViewModel>();
+            CreateMap<Plan, UpdatePlanViewModel>().ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Name)); ;
 
             CreateMap<UpdatePlanViewModel, Plan>()
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
