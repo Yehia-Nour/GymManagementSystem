@@ -137,7 +137,7 @@ namespace GymManagement.BLL.Services.Implmentations
 
         private bool IsCategpruExists(int id) => _unitOfWork.GetRepository<Category>().GetById(id) is not null;
 
-        private bool IsVaildDateRange(DateTime startDate, DateTime endDate) => startDate < endDate;
+        private bool IsVaildDateRange(DateTime startDate, DateTime endDate) => startDate < endDate && startDate > DateTime.Now;
 
         private bool IsSessionAvailableForUpdate(Session? session)
         {
@@ -145,7 +145,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 return false;
             if (session.EndDate < DateTime.Now)
                 return false;
-            if (session.StartDate >= DateTime.Now)
+            if (session.StartDate <= DateTime.Now)
                 return false;
 
             var HasActiveBooking = _unitOfWork.SessionRepository.GetCountOfBookedSlots(session.Id) > 0;

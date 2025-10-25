@@ -65,7 +65,7 @@ namespace GymManagement.PL.Controllers
             if (result)
                 TempData["SuccessMessage"] = "Session Created Successfuly";
             else
-                TempData["ErrorMessage"] = "Session Failed to Create";
+                return View(createSession);
 
             return RedirectToAction(nameof(Index));
         }
