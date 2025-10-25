@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {
-    public class PlantService : IPlantService
+    public class PlanService : IPlanService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public PlantService(IUnitOfWork unitOfWork, IMapper mapper)
+        public PlanService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
