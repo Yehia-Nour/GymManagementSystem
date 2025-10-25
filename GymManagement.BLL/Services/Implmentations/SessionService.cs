@@ -115,6 +115,24 @@ namespace GymManagement.BLL.Services.Implmentations
             catch { return false; }
         }
 
+        public IEnumerable<TrainerSelectViewModel> GetAllTrainersForDropDown()
+        {
+            var trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
+
+            var trainerViewModels = _mapper.Map<IEnumerable<TrainerSelectViewModel>>(trainers);
+
+            return trainerViewModels;
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetAllCategoriesForDropDown()
+        {
+            var categories = _unitOfWork.GetRepository<Category>().GetAll();
+
+            var categoryViewModels = _mapper.Map<IEnumerable<CategorySelectViewModel>>(categories);
+
+            return categoryViewModels;
+        }
+
         private bool IsTrainerExists(int id) => _unitOfWork.GetRepository<Trainer>().GetById(id) is not null;
 
         private bool IsCategpruExists(int id) => _unitOfWork.GetRepository<Category>().GetById(id) is not null;
@@ -127,7 +145,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 return false;
             if (session.EndDate < DateTime.Now)
                 return false;
-            if (session.StartDate <= DateTime.Now)
+            if (session.StartDate >= DateTime.Now)
                 return false;
 
             var HasActiveBooking = _unitOfWork.SessionRepository.GetCountOfBookedSlots(session.Id) > 0;

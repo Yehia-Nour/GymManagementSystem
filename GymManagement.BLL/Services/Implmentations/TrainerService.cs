@@ -61,18 +61,18 @@ namespace GymManagement.BLL.Services.Implmentations
             catch { return false; }
         }
 
-        public TrainerToUpdaterViewModel? GetTrainerToUpdate(int id)
+        public TrainerToUpdateViewModel? GetTrainerToUpdate(int id)
         {
             var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
             if (trainer is null)
                 return null;
 
-            var trainerToUpdate = _mapper.Map<TrainerToUpdaterViewModel>(trainer);
+            var trainerToUpdate = _mapper.Map<TrainerToUpdateViewModel>(trainer);
 
             return trainerToUpdate;
         }
 
-        public bool UpdateTrainer(int id, TrainerToUpdaterViewModel trainerToUpdate)
+        public bool UpdateTrainer(int id, TrainerToUpdateViewModel trainerToUpdate)
         {
             try
             {

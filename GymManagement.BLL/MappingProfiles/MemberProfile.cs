@@ -33,12 +33,12 @@ namespace GymManagement.BLL.MappingProfiles
             CreateMap<HealthRecordViewModel, HealthRecord>().ReverseMap();
 
 
-            CreateMap<Member, MemberToUpdaterViewModel>()
+            CreateMap<Member, MemberToUpdateViewModel>()
                 .ForMember(dest => dest.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber))
                 .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City));
 
-            CreateMap<MemberToUpdaterViewModel, Member>()
+            CreateMap<MemberToUpdateViewModel, Member>()
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now))

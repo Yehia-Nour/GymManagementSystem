@@ -95,7 +95,7 @@ namespace GymManagement.PL.Controllers
             return View(member);
         }
         [HttpPost]
-        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdaterViewModel editMember)
+        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdateViewModel editMember)
         {
             if (!ModelState.IsValid)
                 return View(editMember);

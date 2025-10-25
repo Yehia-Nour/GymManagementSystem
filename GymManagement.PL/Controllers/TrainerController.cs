@@ -80,7 +80,7 @@ namespace GymManagement.PL.Controllers
             return View(trainer);
         }
         [HttpPost]
-        public ActionResult TrainerEdit([FromRoute] int id, TrainerToUpdaterViewModel editTrainer)
+        public ActionResult TrainerEdit([FromRoute] int id, TrainerToUpdateViewModel editTrainer)
         {
             if (!ModelState.IsValid)
                 return View(editTrainer);
