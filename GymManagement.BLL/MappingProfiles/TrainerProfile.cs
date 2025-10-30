@@ -27,12 +27,12 @@ namespace GymManagement.BLL.MappingProfiles
                 .ForPath(dest => dest.Address.Street, opt => opt.MapFrom(src => src.Street))
                 .ForPath(dest => dest.Address.City, opt => opt.MapFrom(src => src.City));
 
-            CreateMap<Trainer, TrainerToUpdaterViewModel>()
+            CreateMap<Trainer, TrainerToUpdateViewModel>()
                 .ForMember(dest => dest.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber))
                 .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City));
 
-            CreateMap<TrainerToUpdaterViewModel, Trainer>()
+            CreateMap<TrainerToUpdateViewModel, Trainer>()
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
                 .ForMember(dest => dest.Email, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now))

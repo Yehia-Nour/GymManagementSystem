@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GymManagement.BLL.Services.AttachmentService;
 using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.DAL.Entities;
@@ -18,11 +19,13 @@ namespace GymManagement.BLL.Services.Implmentations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IAttachmentService _attachmentService;
 
-        public MemberService(IUnitOfWork unitOfWork, IMapper mapper)
+        public MemberService(IUnitOfWork unitOfWork, IMapper mapper, IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _attachmentService = attachmentService;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -65,26 +68,37 @@ namespace GymManagement.BLL.Services.Implmentations
                 if (emailExists || phoneExists)
                     return false;
 
+                var photoName = _attachmentService.Upload("Members", createMember.Photo);
+                if (string.IsNullOrEmpty(photoName))
+                    return false;
+
+
+
                 var member = _mapper.Map<Member>(createMember);
+                member.Photo = photoName;
 
                 _unitOfWork.GetRepository<Member>().Add(member);
-                return _unitOfWork.SaveChanges() > 0;
+                var isCreated = _unitOfWork.SaveChanges() > 0;
+                if (!isCreated)
+                    _attachmentService.Delete(photoName, "Members");
+
+                return isCreated;
             }
             catch { return false; }
         }
 
-        public MemberToUpdaterViewModel? GetMemberToUpdate(int id)
+        public MemberToUpdateViewModel? GetMemberToUpdate(int id)
         {
             var member = _unitOfWork.GetRepository<Member>().GetById(id);
             if (member is null)
                 return null;
 
-            var mebmerViewModel = _mapper.Map<MemberToUpdaterViewModel>(member);
+            var mebmerViewModel = _mapper.Map<MemberToUpdateViewModel>(member);
 
             return mebmerViewModel;
         }
 
-        public bool UpdateMemberDetials(int id, MemberToUpdaterViewModel memberToUpdater)
+        public bool UpdateMemberDetials(int id, MemberToUpdateViewModel memberToUpdater)
         {
             try
             {
@@ -137,7 +151,11 @@ namespace GymManagement.BLL.Services.Implmentations
                 }
 
                 memberRepo.Delete(member);
-                return _unitOfWork.SaveChanges() > 0;
+                var isDeleted = _unitOfWork.SaveChanges() > 0;
+                if (isDeleted)
+                    _attachmentService.Delete(member.Photo, "Members");
+
+                return isDeleted;
             }
             catch { return false; }
         }

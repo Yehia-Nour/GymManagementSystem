@@ -13,7 +13,7 @@ namespace GymManagement.DAL.DataSeed
 {
     public static class GymDbContextDataSeeding
     {
-        public static bool SeedDate(GymDbContext dbContext)
+        public static bool SeedData(GymDbContext dbContext)
         {
             try
             {

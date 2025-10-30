@@ -6,8 +6,7 @@
 
 @Html.ValidationMessage("DataInvaild", new { @class = "text-danger" });
 
-<form asp-action="CreateMember" method="post">
-
+<form method="post" asp-action="CreateMember" enctype="multipart/form-data">
     <!-- Step navigation -->
     <ul class="nav nav-tabs mb-4" id="addMemberTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -34,6 +33,18 @@
                 <hr class="mt-2">
             </div>
             <div class="row g-3">
+
+                <div class="form-group">
+                    <!-- Photo Preview -->
+                    <div class="mt-2">
+                        <img id="photoPreview" src="#" alt="Photo Preview" style="max-width: 200px; display: none;" class="img-thumbnail" />
+                    </div>
+                    <label asp-for="Photo" class="control-label">Profile Photo <span class="text-danger">*</span></label>
+                    <input asp-for="Photo" type="file" class="form-control" accept="image/*" id="photoInput" required />
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                    <small class="form-text text-muted">Max size: 5 MB. Allowed types: JPG, PNG, GIF (Required)</small>
+                </div>
+
                 <div class="col-12 col-md-6">
                     <label asp-for="Name" class="form-label"></label>
                     <input asp-for="Name" type="text" class="form-control" />
@@ -144,4 +155,19 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial"></partial>
+    <script>
+        // Preview photo before upload
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var preview = document.getElementById('photoPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 }

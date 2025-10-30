@@ -54,8 +54,7 @@ else if (TempData["ErrorMessage"] is not null)
                                     }
                                     else
                                     {
-                                        <img src="~/images/@member.Photo" alt="Default Avatar" class="rounded-circle"
-                                             style="width: 40px; height: 40px;" />
+                                        <img src="~/images/Members/@member.Photo" alt="Default Avatar" class="rounded-circle" style="width: 40px; height: 40px;" />
                                     }
                                 </span>
                             </td>
@@ -133,19 +132,9 @@ else if (TempData["ErrorMessage"] is not null)
 
 </div>
 
-@section Scripts
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const alertBox = document.getElementById("Alert");
-            if (alertBox) {
-                setTimeout(() => {
-                    alertBox.style.transition = "opacity 0.5s ease";
-                    alertBox.style.opacity = "0";
-                    setTimeout(() => alertBox.remove(), 500);
-                }, 1500);
-            }
-        });
-    </script>
+
+@section Scripts {
+    <partial name="_AlertBoxScript" />
 }
+
 

@@ -72,7 +72,7 @@ namespace GymManagement.PL.Controllers
             if (result)
                 TempData["SuccessMessage"] = "Member Created Successfuly";
             else
-                TempData["ErrorMessage"] = "Member Failed to Create, Check Phone and Email";
+                TempData["ErrorMessage"] = "Member Failed to Create, Check Data and Missing Fields";
 
             return RedirectToAction(nameof(Index));
         }
@@ -95,7 +95,7 @@ namespace GymManagement.PL.Controllers
             return View(member);
         }
         [HttpPost]
-        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdaterViewModel editMember)
+        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdateViewModel editMember)
         {
             if (!ModelState.IsValid)
                 return View(editMember);

@@ -17,13 +17,13 @@ namespace GymManagement.DAL.Repositories.Implmentations
         public IEnumerable<Session> GetAllSessionsWithTrainersAndCategories()
         {
             return _dbContext.Sessions.Include(s => s.Trainer)
-                                      .Include(s => s.Capacity)
+                                      .Include(s => s.Category)
                                       .ToList();
         }
         public Session? GetSessionByIdWithTrainerandCategory(int id)
         {
             return _dbContext.Sessions.Include(s => s.Trainer)
-                                      .Include(s => s.Capacity)
+                                      .Include(s => s.Category)
                                       .FirstOrDefault(s => s.Id == id);
         }
         public int GetCountOfBookedSlots(int id)

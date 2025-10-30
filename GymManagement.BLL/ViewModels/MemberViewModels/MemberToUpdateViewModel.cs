@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagement.BLL.ViewModels.TrainerViewModels
+namespace GymManagement.BLL.ViewModels.MemberViewModels
 {
-    public class TrainerToUpdaterViewModel
+    public class MemberToUpdateViewModel
     {
         public string Name { get; set; } = null!;
 
@@ -37,7 +37,6 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
         [RegularExpression(@"^[a-z A-Z\s]+$", ErrorMessage = "City Can Contain Only Letters")]
         public string City { get; set; } = null!;
 
-        [Required(ErrorMessage = "Specializations is Required")]
-        public Specialties Specialties { get; set; }
+        public string? Photo { get; set; }
     }
 }
