@@ -1,11 +1,14 @@
+using GymManagement.BLL.Services.AttachmentService;
 using GymManagement.BLL.Services.Implmentations;
 using GymManagement.BLL.Services.Interfaces;
 using GymManagement.DAL.Data.Context;
 using GymManagement.DAL.DataSeed;
+using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
 using GymManagement.DAL.UnitOfWork.Implmentations;
 using GymManagement.DAL.UnitOfWork.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.PL
@@ -33,17 +36,33 @@ namespace GymManagement.PL
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(Config =>
+            {
+                Config.Password.RequiredLength = 6;
+                Config.Password.RequireLowercase = true;
+            }).AddEntityFrameworkStores<GymDbContext>();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
 
             var app = builder.Build();
 
 
-            using var scoped = app.Services.CreateScope();
-            var dbContext = scoped.ServiceProvider.GetRequiredService<GymDbContext>();
-            var pendingMigrations = dbContext.Database.GetPendingMigrations();
-            if (pendingMigrations?.Any() ?? false)
-                dbContext.Database.Migrate();
-            GymDbContextDataSeeding.SeedDate(dbContext);
+            using var Scope = app.Services.CreateScope();
+            var dbContextObj = Scope.ServiceProvider.GetRequiredService<GymDbContext>();
+            var roleManager = Scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = Scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            var PendingMigrations = dbContextObj.Database.GetPendingMigrations();
+            if (PendingMigrations?.Any() ?? false)
+                dbContextObj.Database.Migrate();
+            GymDbContextDataSeeding.SeedData(dbContextObj);
+            IdentityDataSeeding.SeedData(roleManager, userManager);
 
 
             // Configure the HTTP request pipeline.
