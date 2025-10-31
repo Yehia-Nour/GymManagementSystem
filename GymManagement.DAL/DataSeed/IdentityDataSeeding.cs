@@ -39,10 +39,10 @@ namespace GymManagement.DAL.DataSeed
                 {
                     var MainAdmin = new ApplicationUser()
                     {
-                        FirstName = "Aliaa",
-                        LastName = "Tarek",
-                        UserName = "AliaaTarek",
-                        Email = "Aliaatarek@gmail.com",
+                        FirstName = "Yehia",
+                        LastName = "NourEldin",
+                        UserName = "YehiaNourEldin",
+                        Email = "YehiaNourEldin@gmail.com",
                         PhoneNumber = "01123652635"
                     };
 

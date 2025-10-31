@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<MemberViewModel>
+@{
+    ViewData["Title"] = "Members";
+}
 @if (TempData["SuccessMessage"] is not null)
 {
     <div id="Alert" class="alert alert-success alert-dismissible fade show">
