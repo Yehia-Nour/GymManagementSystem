@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.MembershipViewModels;
+using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +32,44 @@ namespace GymManagement.BLL.Services.Implmentations
             var membershipViewModels = _mapper.Map<IEnumerable<MembershipViewModel>>(memberships);
 
             return membershipViewModels;
+        }
+
+        public bool CraeteMembership(CreateMembershipViewModel createMembership)
+        {
+            var member = _unitOfWork.GetRepository<Member>().GetById(createMembership.MemberId);
+            var plan = _unitOfWork.GetRepository<Plan>().GetById(createMembership.PlanId);
+            if (member is null || plan is null || !plan.IsActive)
+                return false;
+
+            var repo = _unitOfWork.MembershipRepository;
+            var MemberHasActiveMembership = repo.GetAll(ms => ms.MemberId == createMembership.MemberId && ms.Status == "Active").Any();
+            if (MemberHasActiveMembership)
+                return false;
+
+            var membership = _mapper.Map<MemberShip>(createMembership);
+            membership.EndDate = DateTime.Now.AddDays(plan.DurationDays);
+
+            repo.Add(membership);
+
+            return _unitOfWork.SaveChanges() > 0;
+        }
+
+        public IEnumerable<MemberSelectViewModel> GetAllMembersForDropDown()
+        {
+            var members = _unitOfWork.GetRepository<Member>().GetAll();
+
+            var memberSelectViewModels = _mapper.Map<IEnumerable<MemberSelectViewModel>>(members);
+
+            return memberSelectViewModels;
+        }
+
+        public IEnumerable<PlanSelectViewModel> GetAllPlansForDropDown()
+        {
+            var plans = _unitOfWork.GetRepository<Plan>().GetAll();
+
+            var planSelectViewModels = _mapper.Map<IEnumerable<PlanSelectViewModel>>(plans);
+
+            return planSelectViewModels;
         }
     }
 }
