@@ -10,5 +10,8 @@ namespace GymManagement.BLL.Services.Interfaces
     public interface IMembershipService
     {
         IEnumerable<MembershipViewModel> GetAllMemberships();
+        bool CraeteMembership(CreateMembershipViewModel createMembership);
+        IEnumerable<MemberSelectViewModel> GetAllMembersForDropDown();
+        IEnumerable<PlanSelectViewModel> GetAllPlansForDropDown();
     }
 }
