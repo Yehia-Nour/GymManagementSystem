@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient.DataClassification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace GymManagement.BLL.Services.Implmentations
         public IEnumerable<SessionViewModel> GetAllSessions()
         {
             var sessions = _unitOfWork.SessionRepository.GetAllSessionsWithTrainersAndCategories();
-            if (sessions is null || !sessions.Any())
+            if (!sessions.Any())
                 return [];
 
             var sessionViewModels = _mapper.Map<IEnumerable<SessionViewModel>>(sessions);

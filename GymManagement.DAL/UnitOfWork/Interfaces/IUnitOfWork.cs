@@ -11,6 +11,7 @@ namespace GymManagement.DAL.UnitOfWork.Interfaces
     public interface IUnitOfWork
     {
         ISessionRepository SessionRepository { get; }
+        IMembershipRepository MembershipRepository { get; }
         IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new ();
         int SaveChanges();
     }

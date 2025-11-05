@@ -18,6 +18,7 @@ namespace GymManagement.DAL.Repositories.Implmentations
         {
             return _dbContext.Sessions.Include(s => s.Trainer)
                                       .Include(s => s.Category)
+                                      .AsNoTracking()
                                       .ToList();
         }
         public Session? GetSessionByIdWithTrainerandCategory(int id)
