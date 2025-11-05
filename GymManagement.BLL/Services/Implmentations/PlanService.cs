@@ -26,7 +26,7 @@ namespace GymManagement.BLL.Services.Implmentations
         public IEnumerable<PlanViewModel> GetAllPlans()
         {
             var plans = _unitOfWork.GetRepository<Plan>().GetAll();
-            if (plans is null || !plans.Any())
+            if (!plans.Any())
                 return [];
 
             var planViewModels = _mapper.Map<IEnumerable<PlanViewModel>>(plans);
