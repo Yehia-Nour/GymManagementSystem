@@ -49,6 +49,21 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public ActionResult Cancel(int id)
+        {
+            if (id <= 0)
+                TempData["ErrorMessage"] = "Id of Membership Can't be 0 or Nigative Number";
+
+            var isDeleted = _membershipService.DeleteMembership(id);
+
+            if (!isDeleted)
+                TempData["ErrorMessage"] = "Membership Can't be Delete";
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
         void LoadMembersDropDowns()
         {
             var members = _membershipService.GetAllMembersForDropDown();
