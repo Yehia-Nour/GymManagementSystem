@@ -54,6 +54,18 @@ namespace GymManagement.BLL.Services.Implmentations
             return _unitOfWork.SaveChanges() > 0;
         }
 
+        public bool DeleteMembership(int id)
+        {
+            var membership = _unitOfWork.GetRepository<MemberShip>().GetById(id);
+
+            if (membership is null || membership.Status == "Expired") 
+                return false;
+
+            _unitOfWork.GetRepository<MemberShip>().Delete(membership);
+
+            return _unitOfWork.SaveChanges() > 0;
+        }
+
         public IEnumerable<MemberSelectViewModel> GetAllMembersForDropDown()
         {
             var members = _unitOfWork.GetRepository<Member>().GetAll();
