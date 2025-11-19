@@ -9,6 +9,6 @@ namespace GymManagement.BLL.Services.Interfaces
 {
     public interface IAnalyticsService
     {
-        AnalyticsViewModel GetAnalyticsData();
+        Task<AnalyticsViewModel> GetAnalyticsDataAsync();
     }
 }

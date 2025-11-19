@@ -3,6 +3,7 @@ using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.MembershipViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
@@ -15,32 +16,32 @@ namespace GymManagement.PL.Controllers
             _membershipService = membershipService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var memberships = _membershipService.GetAllMemberships();
+            var memberships = await _membershipService.GetAllMembershipsAsync();
             return View(memberships);
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            LoadMembersDropDowns();
-            LoadPlansDropDowns();
+            await LoadMembersDropDowns();
+            await LoadPlansDropDowns();
 
             return View();
         }
         [HttpPost]
-        public ActionResult Create(CreateMembershipViewModel createMembership)
+        public async Task<ActionResult> Create(CreateMembershipViewModel createMembership)
         {
             if (!ModelState.IsValid)
             {
-                LoadMembersDropDowns();
-                LoadPlansDropDowns();
+                await LoadMembersDropDowns();
+                await LoadPlansDropDowns();
 
                 ModelState.AddModelError("DataInvaild", "Check Data and Missing Fields");
                 return View(createMembership);
             }
 
-            bool result = _membershipService.CraeteMembership(createMembership);
+            bool result = await _membershipService.CraeteMembershipAsync(createMembership);
             if (result)
                 TempData["SuccessMessage"] = "Membership Created Successfuly";
             else
@@ -50,12 +51,12 @@ namespace GymManagement.PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Cancel(int id)
+        public async Task<ActionResult> Cancel(int id)
         {
             if (id <= 0)
                 TempData["ErrorMessage"] = "Id of Membership Can't be 0 or Nigative Number";
 
-            var isDeleted = _membershipService.DeleteMembership(id);
+            var isDeleted = await _membershipService.DeleteMembershipAsync(id);
 
             if (!isDeleted)
                 TempData["ErrorMessage"] = "Membership Can't be Delete";
@@ -64,14 +65,14 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        void LoadMembersDropDowns()
+        async Task LoadMembersDropDowns()
         {
-            var members = _membershipService.GetAllMembersForDropDown();
+            var members = await _membershipService.GetAllMembersForDropDownAsync();
             ViewBag.Members = new SelectList(members, "Id", "Name");
         }
-        void LoadPlansDropDowns()
+        async Task LoadPlansDropDowns()
         {
-            var plans = _membershipService.GetAllPlansForDropDown();
+            var plans = await _membershipService.GetAllPlansForDropDownAsync();
             ViewBag.Plans = new SelectList(plans, "Id", "Name");
         }
     }

@@ -3,6 +3,7 @@ using GymManagement.BLL.ViewModels.AccountViewModels;
 using GymManagement.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
@@ -22,22 +23,22 @@ namespace GymManagement.PL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = _accountService.ValidateUser(model);
+            var user = await _accountService.ValidateUserAsync(model);
             if (user is null)
             {
                 ModelState.AddModelError("InvalidLogin", "Invalid Email or Password");
                 return View(model);
             }
 
-            var result = _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false).Result;
-            if (result.IsNotAllowed) 
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+            if (result.IsNotAllowed)
                 ModelState.AddModelError("InvalidLogin", "Your Account is Not Allowed");
-            if (result.IsLockedOut) 
+            if (result.IsLockedOut)
                 ModelState.AddModelError("InvalidLogin", "Your Account is Locked Out");
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
@@ -46,9 +47,9 @@ namespace GymManagement.PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Logout()
+        public async Task<ActionResult> Logout()
         {
-            _signInManager.SignOutAsync().GetAwaiter().GetResult();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
     }

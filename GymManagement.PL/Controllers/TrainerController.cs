@@ -5,10 +5,11 @@ using GymManagement.BLL.ViewModels.TrainerViewModels;
 using GymManagement.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
-    [Authorize(Roles ="SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class TrainerController : Controller
     {
         private readonly ITrainerService _trainerService;
@@ -18,13 +19,13 @@ namespace GymManagement.PL.Controllers
             _trainerService = trainerService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var trainers = _trainerService.GetAllTrainers();
+            var trainers = await _trainerService.GetAllTrainersAsync();
             return View(trainers);
         }
 
-        public ActionResult TrainerDetails(int id)
+        public async Task<ActionResult> TrainerDetails(int id)
         {
             if (id <= 0)
             {
@@ -32,7 +33,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var trainer = _trainerService.GetTrainerDetails(id);
+            var trainer = await _trainerService.GetTrainerDetailsAsync(id);
             if (trainer is null)
             {
                 TempData["ErrorMessage"] = "Trainer Not Found";
@@ -47,7 +48,7 @@ namespace GymManagement.PL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreateTrainer(CreateTrainerViewModel createTrainer)
+        public async Task<ActionResult> CreateTrainer(CreateTrainerViewModel createTrainer)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +56,7 @@ namespace GymManagement.PL.Controllers
                 return View(nameof(Create), createTrainer);
             }
 
-            bool result = _trainerService.CreateTrainer(createTrainer);
+            bool result = await _trainerService.CreateTrainerAsync(createTrainer);
             if (result)
                 TempData["SuccessMessage"] = "Trainer Created Successfuly";
             else
@@ -64,7 +65,7 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult TrainerEdit(int id)
+        public async Task<ActionResult> TrainerEdit(int id)
         {
             if (id <= 0)
             {
@@ -72,7 +73,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var trainer = _trainerService.GetTrainerToUpdate(id);
+            var trainer = await _trainerService.GetTrainerToUpdateAsync(id);
             if (trainer is null)
             {
                 TempData["ErrorMessage"] = "Trainer Not Found";
@@ -82,12 +83,12 @@ namespace GymManagement.PL.Controllers
             return View(trainer);
         }
         [HttpPost]
-        public ActionResult TrainerEdit([FromRoute] int id, TrainerToUpdateViewModel editTrainer)
+        public async Task<ActionResult> TrainerEdit([FromRoute] int id, TrainerToUpdateViewModel editTrainer)
         {
             if (!ModelState.IsValid)
                 return View(editTrainer);
 
-            var result = _trainerService.UpdateTrainer(id, editTrainer);
+            var result = await _trainerService.UpdateTrainerAsync(id, editTrainer);
             if (result)
                 TempData["SuccessMessage"] = "Trainer Updated Successfuly";
             else
@@ -96,7 +97,7 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id <= 0)
             {
@@ -104,7 +105,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var trainer = _trainerService.GetTrainerDetails(id);
+            var trainer = await _trainerService.GetTrainerDetailsAsync(id);
             if (trainer is null)
             {
                 TempData["ErrorMessage"] = "Trainer Not Found";
@@ -116,9 +117,9 @@ namespace GymManagement.PL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DeleteConfirm(int id)
+        public async Task<ActionResult> DeleteConfirm(int id)
         {
-            var result = _trainerService.DeleteTrainer(id);
+            var result = await _trainerService.DeleteTrainerAsync(id);
 
             if (result)
                 TempData["SuccessMessage"] = "Trainer Deleted Successfuly";

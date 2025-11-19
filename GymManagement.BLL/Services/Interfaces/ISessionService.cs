@@ -9,13 +9,13 @@ namespace GymManagement.BLL.Services.Interfaces
 {
     public interface ISessionService
     {
-        IEnumerable<SessionViewModel> GetAllSessions();
-        SessionViewModel? GetSessionDetails(int id);
-        bool CreateSession(CreateSessionViewModel createSession);
-        UpdateSessionViewModel? GetSessionToUpdate(int id);
-        bool UpdateSession(UpdateSessionViewModel updateSession, int id);
-        bool DeleteSession(int id);
-        IEnumerable<TrainerSelectViewModel> GetAllTrainersForDropDown();
-        IEnumerable<CategorySelectViewModel> GetAllCategoriesForDropDown();
+        Task<IEnumerable<SessionViewModel>> GetAllSessionsAsync();
+        Task<SessionViewModel?> GetSessionDetailsAsync(int id);
+        Task<bool> CreateSessionAsync(CreateSessionViewModel createSession);
+        Task<UpdateSessionViewModel?> GetSessionToUpdateAsync(int id);
+        Task<bool> UpdateSessionAsync(UpdateSessionViewModel updateSession, int id);
+        Task<bool> DeleteSessionAsync(int id);
+        Task<IEnumerable<TrainerSelectViewModel>> GetAllTrainersForDropDownAsync();
+        Task<IEnumerable<CategorySelectViewModel>> GetAllCategoriesForDropDownAsync();
     }
 }

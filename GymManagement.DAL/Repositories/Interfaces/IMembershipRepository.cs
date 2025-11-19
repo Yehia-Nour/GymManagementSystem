@@ -9,6 +9,6 @@ namespace GymManagement.DAL.Repositories.Interfaces
 {
     public interface IMembershipRepository : IGenericRepository<MemberShip>
     {
-        IEnumerable<MemberShip> GetAllMembershipsWithPlansAndMembers();
+        Task<IEnumerable<MemberShip>> GetAllMembershipsWithPlansAndMembersAsync();
     }
 }

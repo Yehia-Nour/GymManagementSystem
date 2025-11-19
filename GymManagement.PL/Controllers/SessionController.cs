@@ -6,6 +6,7 @@ using GymManagement.BLL.ViewModels.TrainerViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
@@ -18,13 +19,13 @@ namespace GymManagement.PL.Controllers
             _sessionService = sessionService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var sessions = _sessionService.GetAllSessions();
+            var sessions = await _sessionService.GetAllSessionsAsync();
             return View(sessions);
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             if (id <= 0)
             {
@@ -32,7 +33,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var session = _sessionService.GetSessionDetails(id);
+            var session = await _sessionService.GetSessionDetailsAsync(id);
             if (session is null)
             {
                 TempData["ErrorMessage"] = "Session Not Found";
@@ -42,26 +43,26 @@ namespace GymManagement.PL.Controllers
             return View(session);
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            LoadTrainersDropDowns();
-            LoadCategoriesDropDowns();
+            await LoadTrainersDropDownsAsync();
+            await LoadCategoriesDropDownsAsync();
 
             return View();
         }
         [HttpPost]
-        public ActionResult Create(CreateSessionViewModel createSession)
+        public async Task<ActionResult> Create(CreateSessionViewModel createSession)
         {
             if (!ModelState.IsValid)
             {
-                LoadTrainersDropDowns();
-                LoadCategoriesDropDowns();
+                await LoadTrainersDropDownsAsync();
+                await LoadCategoriesDropDownsAsync();
 
                 ModelState.AddModelError("DataInvaild", "Check Data and Missing Fields");
                 return View(createSession);
             }
 
-            bool result = _sessionService.CreateSession(createSession);
+            bool result = await _sessionService.CreateSessionAsync(createSession);
             if (result)
                 TempData["SuccessMessage"] = "Session Created Successfuly";
             else
@@ -70,7 +71,7 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             if (id <= 0)
             {
@@ -78,29 +79,29 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var session = _sessionService.GetSessionToUpdate(id);
+            var session = await _sessionService.GetSessionToUpdateAsync(id);
             if (session is null)
             {
                 TempData["ErrorMessage"] = "Session Not Found";
                 return RedirectToAction(nameof(Index));
             }
 
-            LoadTrainersDropDowns();
+            await LoadTrainersDropDownsAsync();
 
             return View(session);
         }
         [HttpPost]
-        public ActionResult Edit([FromRoute] int id, UpdateSessionViewModel editSession)
+        public async Task<ActionResult> Edit([FromRoute] int id, UpdateSessionViewModel editSession)
         {
             if (!ModelState.IsValid)
             {
-                LoadTrainersDropDowns();
+                await LoadTrainersDropDownsAsync();
 
                 ModelState.AddModelError("DataInvaild", "Check Data and Missing Fields");
                 return View(editSession);
             }
 
-            var result = _sessionService.UpdateSession(editSession, id);
+            var result = await _sessionService.UpdateSessionAsync(editSession, id);
             if (result)
                 TempData["SuccessMessage"] = "Session Updated Successfuly";
             else
@@ -108,7 +109,7 @@ namespace GymManagement.PL.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id <= 0)
             {
@@ -116,7 +117,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var session = _sessionService.GetSessionDetails(id);
+            var session = await _sessionService.GetSessionDetailsAsync(id);
             if (session is null)
             {
                 TempData["ErrorMessage"] = "Session Not Found";
@@ -127,9 +128,9 @@ namespace GymManagement.PL.Controllers
             return View(session);
         }
         [HttpPost]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            var result = _sessionService.DeleteSession(id);
+            var result = await _sessionService.DeleteSessionAsync(id);
 
             if (result)
                 TempData["SuccessMessage"] = "Session Deleted Successfuly";
@@ -139,14 +140,14 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        void LoadTrainersDropDowns()
+        async Task LoadTrainersDropDownsAsync()
         {
-            var trainers = _sessionService.GetAllTrainersForDropDown();
+            var trainers = await _sessionService.GetAllTrainersForDropDownAsync();
             ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
         }
-        void LoadCategoriesDropDowns()
+        async Task LoadCategoriesDropDownsAsync()
         {
-            var categories = _sessionService.GetAllCategoriesForDropDown();
+            var categories = await _sessionService.GetAllCategoriesForDropDownAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
         }
     }

@@ -14,20 +14,20 @@ namespace GymManagement.DAL.Repositories.Implmentations
     {
         public SessionRepository(GymDbContext dbContext) : base(dbContext) { }
 
-        public IEnumerable<Session> GetAllSessionsWithTrainersAndCategories()
+        public async Task<IEnumerable<Session>> GetAllSessionsWithTrainersAndCategoriesAsync()
         {
-            return _dbContext.Sessions.Include(s => s.Trainer)
+            return await _dbContext.Sessions.Include(s => s.Trainer)
                                       .Include(s => s.Category)
                                       .AsNoTracking()
-                                      .ToList();
+                                      .ToListAsync();
         }
-        public Session? GetSessionByIdWithTrainerandCategory(int id)
+        public async Task<Session?> GetSessionByIdWithTrainerandCategoryAsync(int id)
         {
-            return _dbContext.Sessions.Include(s => s.Trainer)
+            return await _dbContext.Sessions.Include(s => s.Trainer)
                                       .Include(s => s.Category)
-                                      .FirstOrDefault(s => s.Id == id);
+                                      .FirstOrDefaultAsync(s => s.Id == id);
         }
-        public int GetCountOfBookedSlots(int id)
-            => _dbContext.MembersSessions.Count(ms => ms.SessionId == id);
+        public async Task<int> GetCountOfBookedSlotsAsync(int id)
+            => await _dbContext.MembersSessions.CountAsync(ms => ms.SessionId == id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GymManagement.DAL.Data.Context;
 using GymManagement.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,12 @@ namespace GymManagement.DAL.DataSeed
 {
     public static class GymDbContextDataSeeding
     {
-        public static bool SeedData(GymDbContext dbContext)
+        public static async Task<bool> SeedData(GymDbContext dbContext)
         {
             try
             {
-                var hasPlans = dbContext.Plans.Any();
-                var hasCategories = dbContext.Categories.Any();
+                var hasPlans = await dbContext.Plans.AnyAsync();
+                var hasCategories = await dbContext.Categories.AnyAsync();
                 if (hasPlans && hasCategories)
                     return false;
 
@@ -26,17 +27,17 @@ namespace GymManagement.DAL.DataSeed
                 {
                     var plans = LoadDataFromJsonFile<Plan>("plans.json");
                     if (plans.Any())
-                        dbContext.Plans.AddRange(plans);
+                        await dbContext.Plans.AddRangeAsync(plans);
                 }
 
                 if (!hasCategories)
                 {
                     var categories = LoadDataFromJsonFile<Category>("categories.json");
                     if (categories.Any())
-                        dbContext.Categories.AddRange(categories);
+                        await dbContext.Categories.AddRangeAsync(categories);
                 }
 
-                return dbContext.SaveChanges() > 0;
+                return await dbContext.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {

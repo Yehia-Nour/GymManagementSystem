@@ -2,10 +2,11 @@
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
-    [Authorize(Roles ="SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
@@ -15,13 +16,13 @@ namespace GymManagement.PL.Controllers
             _memberService = memberService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var members = _memberService.GetAllMembers();
+            var members = await _memberService.GetAllMembersAsync();
             return View(members);
         }
 
-        public ActionResult MemberDetails(int id)
+        public async Task<ActionResult> MemberDetails(int id)
         {
             if (id <= 0)
             {
@@ -29,7 +30,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var member = _memberService.GetMemberDetials(id);
+            var member = await _memberService.GetMemberDetialsAsync(id);
             if (member is null)
             {
                 TempData["ErrorMessage"] = "Member Not Found";
@@ -39,7 +40,7 @@ namespace GymManagement.PL.Controllers
             return View(member);
         }
 
-        public ActionResult HealthRecordDetails(int id)
+        public async Task<ActionResult> HealthRecordDetails(int id)
         {
             if (id <= 0)
             {
@@ -47,7 +48,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var healthRecord = _memberService.GetMemberHealthRecordDetials(id);
+            var healthRecord = await _memberService.GetMemberHealthRecordDetialsAsync(id);
             if (healthRecord is null)
             {
                 TempData["ErrorMessage"] = "HealthRecord Not Found";
@@ -62,7 +63,7 @@ namespace GymManagement.PL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreateMember(CreateMemberViewModel createMember)
+        public async Task<ActionResult> CreateMember(CreateMemberViewModel createMember)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +71,7 @@ namespace GymManagement.PL.Controllers
                 return View(nameof(Create), createMember);
             }
 
-            bool result = _memberService.CreateMember(createMember);
+            bool result = await _memberService.CreateMemberAsync(createMember);
             if (result)
                 TempData["SuccessMessage"] = "Member Created Successfuly";
             else
@@ -79,7 +80,7 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult MemberEdit(int id)
+        public async Task<ActionResult> MemberEdit(int id)
         {
             if (id <= 0)
             {
@@ -87,7 +88,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var member = _memberService.GetMemberToUpdate(id);
+            var member = await _memberService.GetMemberToUpdateAsync(id);
             if (member is null)
             {
                 TempData["ErrorMessage"] = "Member Not Found";
@@ -97,12 +98,12 @@ namespace GymManagement.PL.Controllers
             return View(member);
         }
         [HttpPost]
-        public ActionResult MemberEdit([FromRoute]int id, MemberToUpdateViewModel editMember)
+        public async Task<ActionResult> MemberEdit([FromRoute] int id, MemberToUpdateViewModel editMember)
         {
             if (!ModelState.IsValid)
                 return View(editMember);
 
-            var result = _memberService.UpdateMemberDetials(id, editMember);
+            var result = await _memberService.UpdateMemberDetialsAsync(id, editMember);
             if (result)
                 TempData["SuccessMessage"] = "Member Updated Successfuly";
             else
@@ -111,7 +112,7 @@ namespace GymManagement.PL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id <= 0)
             {
@@ -119,7 +120,7 @@ namespace GymManagement.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var member = _memberService.GetMemberDetials(id);
+            var member = await _memberService.GetMemberDetialsAsync(id);
             if (member is null)
             {
                 TempData["ErrorMessage"] = "Member Not Found";
@@ -131,9 +132,9 @@ namespace GymManagement.PL.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DeleteConfirm(int id)
+        public async Task<ActionResult> DeleteConfirm(int id)
         {
-            var result = _memberService.DeleteMember(id);
+            var result = await _memberService.DeleteMemberAsync(id);
 
             if (result)
                 TempData["SuccessMessage"] = "Member Deleted Successfuly";

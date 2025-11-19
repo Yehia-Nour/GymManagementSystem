@@ -13,6 +13,6 @@ namespace GymManagement.DAL.UnitOfWork.Interfaces
         ISessionRepository SessionRepository { get; }
         IMembershipRepository MembershipRepository { get; }
         IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new ();
-        int SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

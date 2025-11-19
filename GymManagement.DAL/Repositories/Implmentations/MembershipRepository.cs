@@ -13,13 +13,14 @@ namespace GymManagement.DAL.Repositories.Implmentations
     public class MembershipRepository : GenericRepository<MemberShip>, IMembershipRepository
     {
         public MembershipRepository(GymDbContext dbContext) : base(dbContext) { }
-        public IEnumerable<MemberShip> GetAllMembershipsWithPlansAndMembers()
+        public async Task<IEnumerable<MemberShip>> GetAllMembershipsWithPlansAndMembersAsync()
         {
-            return _dbContext.MembersShips
+            return await _dbContext.MembersShips
+                 .Where(ms => ms.Status == "Active")
                  .Include(ms => ms.Plan)
                  .Include(ms => ms.Member)
                  .AsNoTracking()
-                 .ToList();
+                 .ToListAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GymManagement.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace GymManagement.DAL.DataSeed
 {
     public static class IdentityDataSeeding
     {
-        public static bool SeedData(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public static async Task<bool> SeedData(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             try
             {
-                bool HasUsers = userManager.Users.Any();
-                bool HasRoles = roleManager.Roles.Any();
+                bool HasUsers = await userManager.Users.AnyAsync();
+                bool HasRoles = await roleManager.Roles.AnyAsync();
 
                 if (HasUsers && HasRoles) return false;
 
@@ -29,9 +30,9 @@ namespace GymManagement.DAL.DataSeed
 
                     foreach (var Role in Roles)
                     {
-                        if (!roleManager.RoleExistsAsync(Role.Name!).Result)
+                        if (!await roleManager.RoleExistsAsync(Role.Name!))
                         {
-                            roleManager.CreateAsync(Role).Wait();
+                            await roleManager.CreateAsync(Role);
                         }
                     }
                 }
@@ -46,8 +47,8 @@ namespace GymManagement.DAL.DataSeed
                         PhoneNumber = "01123652635"
                     };
 
-                    userManager.CreateAsync(MainAdmin, "P@ssw0rd").Wait();
-                    userManager.AddToRoleAsync(MainAdmin, "SuperAdmin").Wait();
+                    await userManager.CreateAsync(MainAdmin, "P@ssw0rd");
+                    await userManager.AddToRoleAsync(MainAdmin, "SuperAdmin");
 
                     var Admin01 = new ApplicationUser()
                     {
@@ -58,8 +59,8 @@ namespace GymManagement.DAL.DataSeed
                         PhoneNumber = "01232589652"
                     };
 
-                    userManager.CreateAsync(Admin01, "P@ssw0rd").Wait();
-                    userManager.AddToRoleAsync(Admin01, "Admin").Wait();
+                    await userManager.CreateAsync(Admin01, "P@ssw0rd");
+                    await userManager.AddToRoleAsync(Admin01, "Admin");
                 }
                 return true;
             }

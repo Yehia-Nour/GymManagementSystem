@@ -3,6 +3,7 @@ using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.AnalyticsViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +22,17 @@ namespace GymManagement.BLL.Services.Implmentations
             _unitOfWork = unitOfWork;
         }
 
-        public AnalyticsViewModel GetAnalyticsData()
+        public async Task<AnalyticsViewModel> GetAnalyticsDataAsync()
         {
-            var sessionRepo = _unitOfWork.SessionRepository.GetAll();
+            var sessionRepo = _unitOfWork.SessionRepository.GetAllQueryable();
             return new AnalyticsViewModel
             {
-                ActiveMembers = _unitOfWork.GetRepository<MemberShip>().GetAll(m => m.Status == "Active").Count(),
-                TotalMembers = _unitOfWork.GetRepository<Member>().GetAll().Count(),
-                TotalTrainers = _unitOfWork.GetRepository<Trainer>().GetAll().Count(),
-                UpcomingSessions = sessionRepo.Count(s => s.StartDate > DateTime.Now),
-                OngoingSessions = sessionRepo.Count(s => s.StartDate <= DateTime.Now && s.EndDate > DateTime.Now),
-                CompletedSessions = sessionRepo.Count(s => s.EndDate <  DateTime.Now)
+                ActiveMembers = await _unitOfWork.GetRepository<MemberShip>().GetAllQueryable(m => m.Status == "Active").CountAsync(),
+                TotalMembers = await _unitOfWork.GetRepository<Member>().GetAllQueryable().CountAsync(),
+                TotalTrainers = await _unitOfWork.GetRepository<Trainer>().GetAllQueryable().CountAsync(),
+                UpcomingSessions = await sessionRepo.CountAsync(s => s.StartDate > DateTime.Now),
+                OngoingSessions = await sessionRepo.CountAsync(s => s.StartDate <= DateTime.Now && s.EndDate > DateTime.Now),
+                CompletedSessions = await sessionRepo.CountAsync(s => s.EndDate < DateTime.Now)
             };
         }
     }

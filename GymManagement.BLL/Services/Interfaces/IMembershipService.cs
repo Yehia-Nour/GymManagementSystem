@@ -9,10 +9,10 @@ namespace GymManagement.BLL.Services.Interfaces
 {
     public interface IMembershipService
     {
-        IEnumerable<MembershipViewModel> GetAllMemberships();
-        bool CraeteMembership(CreateMembershipViewModel createMembership);
-        bool DeleteMembership(int id);
-        IEnumerable<MemberSelectViewModel> GetAllMembersForDropDown();
-        IEnumerable<PlanSelectViewModel> GetAllPlansForDropDown();
+        Task<IEnumerable<MembershipViewModel>> GetAllMembershipsAsync();
+        Task<bool> CraeteMembershipAsync(CreateMembershipViewModel createMembership);
+        Task<bool> DeleteMembershipAsync(int id);
+        Task<IEnumerable<MemberSelectViewModel>> GetAllMembersForDropDownAsync();
+        Task<IEnumerable<PlanSelectViewModel>> GetAllPlansForDropDownAsync();
     }
 }

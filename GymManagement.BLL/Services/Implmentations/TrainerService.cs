@@ -3,6 +3,7 @@ using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.TrainerViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace GymManagement.BLL.Services.Implmentations
             _mapper = mapper;
         }
 
-        public IEnumerable<TrainerViewModel> GetAllTrainers()
+        public async Task<IEnumerable<TrainerViewModel>> GetAllTrainersAsync()
         {
-            var trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
+            var trainers = await _unitOfWork.GetRepository<Trainer>().GetAllQueryable().ToListAsync();
             if (!trainers.Any())
                 return [];
 
@@ -33,9 +34,9 @@ namespace GymManagement.BLL.Services.Implmentations
             return trainerViewModels;
         }
 
-        public TrainerWithDetailsViewModel? GetTrainerDetails(int id)
+        public async Task<TrainerWithDetailsViewModel?> GetTrainerDetailsAsync(int id)
         {
-            var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
+            var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIdAsync(id);
             if (trainer is null)
                 return null;
 
@@ -44,26 +45,26 @@ namespace GymManagement.BLL.Services.Implmentations
             return trainerViewModel;
         }
 
-        public bool CreateTrainer(CreateTrainerViewModel createTrainer)
+        public async Task<bool> CreateTrainerAsync(CreateTrainerViewModel createTrainer)
         {
             try
             {
-                var emailExists = IsEmailExists(createTrainer.Email);
-                var phoneExists = IsPhoneExists(createTrainer.Phone);
+                var emailExists = await IsEmailExistsAsync(createTrainer.Email);
+                var phoneExists = await IsPhoneExistsAsync(createTrainer.Phone);
                 if (emailExists || phoneExists)
                     return false;
 
                 var trainer = _mapper.Map<Trainer>(createTrainer);
 
-                _unitOfWork.GetRepository<Trainer>().Add(trainer);
-                return _unitOfWork.SaveChanges() > 0;
+                await _unitOfWork.GetRepository<Trainer>().AddAsync(trainer);
+                return await _unitOfWork.SaveChangesAsync() > 0;
             }
             catch { return false; }
         }
 
-        public TrainerToUpdateViewModel? GetTrainerToUpdate(int id)
+        public async Task<TrainerToUpdateViewModel?> GetTrainerToUpdateAsync(int id)
         {
-            var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
+            var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIdAsync(id);
             if (trainer is null)
                 return null;
 
@@ -72,19 +73,19 @@ namespace GymManagement.BLL.Services.Implmentations
             return trainerToUpdate;
         }
 
-        public bool UpdateTrainer(int id, TrainerToUpdateViewModel trainerToUpdate)
+        public async Task<bool> UpdateTrainerAsync(int id, TrainerToUpdateViewModel trainerToUpdate)
         {
             try
             {
-                var emailExists = _unitOfWork.GetRepository<Trainer>()
-                    .GetAll(t => t.Email == trainerToUpdate.Email && t.Id != id).Any();
+                var emailExists = await _unitOfWork.GetRepository<Trainer>()
+                    .GetAllQueryable(t => t.Email == trainerToUpdate.Email && t.Id != id).AnyAsync();
 
-                var phoneExists = _unitOfWork.GetRepository<Trainer>()
-                    .GetAll(t => t.Phone == trainerToUpdate.Phone && t.Id != id).Any();
+                var phoneExists = await _unitOfWork.GetRepository<Trainer>()
+                    .GetAllQueryable(t => t.Phone == trainerToUpdate.Phone && t.Id != id).AnyAsync();
                 if (emailExists || phoneExists)
                     return false;
 
-                var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
+                var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIdAsync(id);
                 if (trainer is null)
                     return false;
 
@@ -92,33 +93,33 @@ namespace GymManagement.BLL.Services.Implmentations
 
                 _unitOfWork.GetRepository<Trainer>().Update(trainer);
 
-                return _unitOfWork.SaveChanges() > 0;
+                return await _unitOfWork.SaveChangesAsync() > 0;
             }
             catch { return false; }
         }
 
-        public bool DeleteTrainer(int id)
+        public async Task<bool> DeleteTrainerAsync(int id)
         {
             try
             {
-                var trainer = _unitOfWork.GetRepository<Trainer>().GetById(id);
+                var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIdAsync(id);
                 if (trainer is null)
                     return false;
 
-                var haveSession = _unitOfWork.GetRepository<Session>().GetAll(s => s.TrainerId == id || s.StartDate > DateTime.UtcNow).Any();
+                var haveSession = await _unitOfWork.GetRepository<Session>().GetAllQueryable(s => s.TrainerId == id || s.StartDate > DateTime.UtcNow).AnyAsync();
                 if (haveSession)
                     return false;
 
                 _unitOfWork.GetRepository<Trainer>().Delete(trainer);
 
-                return _unitOfWork.SaveChanges() > 0;
+                return await _unitOfWork.SaveChangesAsync() > 0;
             }
             catch { return false; }
         }
 
 
-        private bool IsEmailExists(string email) => _unitOfWork.GetRepository<Trainer>().GetAll(t => t.Email == email).Any();
+        private async Task<bool> IsEmailExistsAsync(string email) => await _unitOfWork.GetRepository<Trainer>().GetAllQueryable(t => t.Email == email).AnyAsync();
 
-        private bool IsPhoneExists(string phone) => _unitOfWork.GetRepository<Trainer>().GetAll(t => t.Phone == phone).Any();
+        private async Task<bool> IsPhoneExistsAsync(string phone) => await _unitOfWork.GetRepository<Trainer>().GetAllQueryable(t => t.Phone == phone).AnyAsync();
     }
 }

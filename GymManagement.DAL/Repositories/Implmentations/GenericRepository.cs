@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,17 +20,19 @@ namespace GymManagement.DAL.Repositories.Implmentations
             _dbContext = dbContext;
         }
 
-        public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
+        public IQueryable<TEntity> GetAllQueryable(Expression<Func<TEntity, bool>>? condition = null)
         {
-            if (condition is null)
-                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+            var query = _dbContext.Set<TEntity>().AsNoTracking();
+            if (condition != null)
+                query = query.Where(condition);
 
-            return _dbContext.Set<TEntity>().AsNoTracking().Where(condition).ToList();
+            return query;
         }
 
-        public TEntity? GetById(int id) => _dbContext.Set<TEntity>().Find(id);
 
-        public void Add(TEntity entity) => _dbContext.Set<TEntity>().Add(entity);
+        public async Task<TEntity?> GetByIdAsync(int id) => await _dbContext.Set<TEntity>().FindAsync(id);
+
+        public async Task AddAsync(TEntity entity) => await _dbContext.Set<TEntity>().AddAsync(entity);
 
         public void Update(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
 

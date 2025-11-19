@@ -15,7 +15,7 @@ namespace GymManagement.PL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -60,11 +60,11 @@ namespace GymManagement.PL
             var roleManager = Scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = Scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            var PendingMigrations = dbContextObj.Database.GetPendingMigrations();
+            var PendingMigrations = await dbContextObj.Database.GetPendingMigrationsAsync();
             if (PendingMigrations?.Any() ?? false)
-                dbContextObj.Database.Migrate();
-            GymDbContextDataSeeding.SeedData(dbContextObj);
-            IdentityDataSeeding.SeedData(roleManager, userManager);
+               await dbContextObj.Database.MigrateAsync();
+            await GymDbContextDataSeeding.SeedData(dbContextObj);
+            await IdentityDataSeeding.SeedData(roleManager, userManager);
 
 
             // Configure the HTTP request pipeline.

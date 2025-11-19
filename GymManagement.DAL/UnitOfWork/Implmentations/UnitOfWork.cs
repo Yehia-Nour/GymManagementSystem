@@ -37,9 +37,9 @@ namespace GymManagement.DAL.UnitOfWork.Implmentations
             return newRepo;
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
-            return _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }
