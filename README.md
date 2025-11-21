@@ -221,11 +221,3 @@ Soft delete applied to Plans.
 - AutoMapper for mapping  
 
 ---
-
-## 💡 Future Enhancements
-- Add admin dashboard analytics  
-- Implement RESTful API endpoints  
-- Integrate payment gateway for plan purchases  
-- Add user roles and permissions management  
-
----
