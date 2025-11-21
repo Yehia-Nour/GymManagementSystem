@@ -66,7 +66,11 @@ namespace GymManagement.PL.Controllers
             if (result)
                 TempData["SuccessMessage"] = "Session Created Successfuly";
             else
+            {
+                await LoadTrainersDropDownsAsync();
+                await LoadCategoriesDropDownsAsync();
                 return View(createSession);
+            }
 
             return RedirectToAction(nameof(Index));
         }

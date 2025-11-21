@@ -16,7 +16,7 @@ namespace GymManagement.DAL.Repositories.Implmentations
         public async Task<IEnumerable<MemberShip>> GetAllMembershipsWithPlansAndMembersAsync()
         {
             return await _dbContext.MembersShips
-                 .Where(ms => ms.Status == "Active")
+                 .Where(ms => ms.EndDate >= DateTime.Now)
                  .Include(ms => ms.Plan)
                  .Include(ms => ms.Member)
                  .AsNoTracking()

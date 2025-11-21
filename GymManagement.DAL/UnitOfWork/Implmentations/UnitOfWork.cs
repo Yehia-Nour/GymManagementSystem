@@ -3,11 +3,6 @@ using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Implmentations;
 using GymManagement.DAL.Repositories.Interfaces;
 using GymManagement.DAL.UnitOfWork.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.DAL.UnitOfWork.Implmentations
 {
@@ -15,16 +10,22 @@ namespace GymManagement.DAL.UnitOfWork.Implmentations
     {
         private readonly GymDbContext _dbContext;
         private readonly Dictionary<Type, object> _reposiotries = [];
-        public UnitOfWork(GymDbContext dbContext, ISessionRepository sessionRepository, IMembershipRepository membershipRepository)
+        public UnitOfWork(GymDbContext dbContext,
+            ISessionRepository sessionRepository,
+            IMembershipRepository membershipRepository,
+            IBookingRepository bookingRepository)
         {
             _dbContext = dbContext;
             SessionRepository = sessionRepository;
             MembershipRepository = membershipRepository;
+            BookingRepository = bookingRepository;
         }
 
         public ISessionRepository SessionRepository { get; }
 
         public IMembershipRepository MembershipRepository { get; }
+
+        public IBookingRepository BookingRepository { get; }
 
         public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new()
         {
