@@ -12,7 +12,7 @@ namespace GymManagement.BLL.Services.Interfaces
         Task<IEnumerable<MembershipViewModel>> GetAllMembershipsAsync();
         Task<bool> CraeteMembershipAsync(CreateMembershipViewModel createMembership);
         Task<bool> DeleteMembershipAsync(int id);
-        Task<IEnumerable<MemberSelectViewModel>> GetAllMembersForDropDownAsync();
+        Task<IEnumerable<MemberSelectListViewModel>> GetAllMembersForDropDownAsync();
         Task<IEnumerable<PlanSelectViewModel>> GetAllPlansForDropDownAsync();
     }
 }

@@ -27,7 +27,7 @@ namespace GymManagement.BLL.Services.Implmentations
             var sessionRepo = _unitOfWork.SessionRepository.GetAllQueryable();
             return new AnalyticsViewModel
             {
-                ActiveMembers = await _unitOfWork.GetRepository<MemberShip>().GetAllQueryable(m => m.Status == "Active").CountAsync(),
+                ActiveMembers = await _unitOfWork.GetRepository<MemberShip>().GetAllQueryable(ms => ms.EndDate >= DateTime.Now).CountAsync(),
                 TotalMembers = await _unitOfWork.GetRepository<Member>().GetAllQueryable().CountAsync(),
                 TotalTrainers = await _unitOfWork.GetRepository<Trainer>().GetAllQueryable().CountAsync(),
                 UpcomingSessions = await sessionRepo.CountAsync(s => s.StartDate > DateTime.Now),

@@ -43,7 +43,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 return false;
 
             var repo = _unitOfWork.MembershipRepository;
-            var MemberHasActiveMembership = await repo.GetAllQueryable(ms => ms.MemberId == createMembership.MemberId && ms.Status == "Active").AnyAsync();
+            var MemberHasActiveMembership = await repo.GetAllQueryable(ms => ms.MemberId == createMembership.MemberId && ms.EndDate >= DateTime.Now).AnyAsync();
             if (MemberHasActiveMembership)
                 return false;
 
@@ -67,11 +67,11 @@ namespace GymManagement.BLL.Services.Implmentations
             return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<MemberSelectViewModel>> GetAllMembersForDropDownAsync()
+        public async Task<IEnumerable<MemberSelectListViewModel>> GetAllMembersForDropDownAsync()
         {
             var members = await _unitOfWork.GetRepository<Member>().GetAllQueryable().ToListAsync();
 
-            var memberSelectViewModels = _mapper.Map<IEnumerable<MemberSelectViewModel>>(members);
+            var memberSelectViewModels = _mapper.Map<IEnumerable<MemberSelectListViewModel>>(members);
 
             return memberSelectViewModels;
         }
