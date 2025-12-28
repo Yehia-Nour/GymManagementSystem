@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GymManagement.BLL.ViewModels.PlanViewModels
+﻿namespace GymManagement.BLL.ViewModels.PlanViewModels
 {
     public class PlanViewModel
     {

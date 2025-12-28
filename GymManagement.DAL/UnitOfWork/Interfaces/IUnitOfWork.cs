@@ -1,10 +1,5 @@
 ﻿using GymManagement.DAL.Entities;
 using GymManagement.DAL.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.DAL.UnitOfWork.Interfaces
 {
@@ -13,7 +8,7 @@ namespace GymManagement.DAL.UnitOfWork.Interfaces
         ISessionRepository SessionRepository { get; }
         IMembershipRepository MembershipRepository { get; }
         IBookingRepository BookingRepository { get; }
-        IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new ();
+        IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity, new();
         Task<int> SaveChangesAsync();
     }
 }

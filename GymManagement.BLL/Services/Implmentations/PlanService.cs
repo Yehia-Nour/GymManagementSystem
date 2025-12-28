@@ -4,12 +4,6 @@ using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {

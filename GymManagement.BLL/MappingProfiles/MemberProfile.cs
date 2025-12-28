@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Member = GymManagement.DAL.Entities.Member;
 
 namespace GymManagement.BLL.MappingProfiles

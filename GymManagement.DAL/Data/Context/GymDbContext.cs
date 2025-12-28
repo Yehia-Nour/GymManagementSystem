@@ -1,12 +1,7 @@
 ﻿using GymManagement.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.DAL.Data.Context
 {
@@ -27,7 +22,7 @@ namespace GymManagement.DAL.Data.Context
         public DbSet<HealthRecord> HealthRecords { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Plan> Plans { get; set; }
-        public DbSet<Category> Categories {  get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<MemberShip> MembersShips { get; set; }
         public DbSet<MemberSession> MembersSessions { get; set; }

@@ -64,7 +64,7 @@ namespace GymManagement.PL
 
             var PendingMigrations = await dbContextObj.Database.GetPendingMigrationsAsync();
             if (PendingMigrations?.Any() ?? false)
-               await dbContextObj.Database.MigrateAsync();
+                await dbContextObj.Database.MigrateAsync();
             await GymDbContextDataSeeding.SeedData(dbContextObj);
             await IdentityDataSeeding.SeedData(roleManager, userManager);
 

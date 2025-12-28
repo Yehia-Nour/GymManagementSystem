@@ -3,14 +3,7 @@ using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.SessionViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
-using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {

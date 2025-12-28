@@ -4,11 +4,6 @@ using GymManagement.BLL.ViewModels.TrainerViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {

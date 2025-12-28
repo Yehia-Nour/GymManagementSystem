@@ -3,7 +3,6 @@ using GymManagement.BLL.ViewModels.AccountViewModels;
 using GymManagement.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {

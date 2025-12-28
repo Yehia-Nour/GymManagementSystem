@@ -1,12 +1,7 @@
-﻿using GymManagement.BLL.Services.Implmentations;
-using GymManagement.BLL.Services.Interfaces;
-using GymManagement.BLL.ViewModels.MemberViewModels;
+﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.SessionViewModels;
-using GymManagement.BLL.ViewModels.TrainerViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {

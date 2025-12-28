@@ -1,11 +1,4 @@
-﻿using GymManagement.BLL.ViewModels.MemberViewModels;
-using GymManagement.BLL.ViewModels.TrainerViewModels;
-using GymManagement.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GymManagement.BLL.ViewModels.TrainerViewModels;
 
 namespace GymManagement.BLL.Services.Interfaces
 {

@@ -6,11 +6,6 @@ using GymManagement.BLL.ViewModels.SessionViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {
@@ -140,7 +135,7 @@ namespace GymManagement.BLL.Services.Implmentations
                                                       .Select(s => s.MemberId)
                                                       .ToListAsync();
 
-            var availableMembersToBook = await  _unitOfWork.GetRepository<Member>().GetAllQueryable(m => !bookedMemberIds.Contains(m.Id)).ToListAsync();
+            var availableMembersToBook = await _unitOfWork.GetRepository<Member>().GetAllQueryable(m => !bookedMemberIds.Contains(m.Id)).ToListAsync();
 
             var memberSelectListViewModel = _mapper.Map<IEnumerable<MemberSelectListViewModel>>(availableMembersToBook);
 

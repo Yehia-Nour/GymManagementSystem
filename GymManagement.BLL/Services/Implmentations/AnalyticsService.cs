@@ -1,14 +1,8 @@
-﻿using AutoMapper.Execution;
-using GymManagement.BLL.Services.Interfaces;
+﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.AnalyticsViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Member = GymManagement.DAL.Entities.Member;
 
 namespace GymManagement.BLL.Services.Implmentations

@@ -2,7 +2,6 @@
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {

@@ -1,9 +1,7 @@
-﻿using GymManagement.BLL.Services.Implmentations;
-using GymManagement.BLL.Services.Interfaces;
+﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.MemberSessionViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
@@ -18,7 +16,7 @@ namespace GymManagement.PL.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var sessions = await _bookingService.GetAllSessionsWithTrainerAndCategoryAsync();  
+            var sessions = await _bookingService.GetAllSessionsWithTrainerAndCategoryAsync();
             return View(sessions);
         }
 

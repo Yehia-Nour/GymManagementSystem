@@ -1,8 +1,6 @@
-﻿using GymManagement.BLL.Services.Implmentations;
-using GymManagement.BLL.Services.Interfaces;
+﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.PlanViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GymManagement.PL.Controllers
 {
@@ -75,7 +73,7 @@ namespace GymManagement.PL.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Activate(int id )
+        public async Task<ActionResult> Activate(int id)
         {
             var result = await _planService.ToggleStatusAsync(id);
             if (result)

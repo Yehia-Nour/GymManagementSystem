@@ -4,12 +4,6 @@ using GymManagement.BLL.ViewModels.MembershipViewModels;
 using GymManagement.DAL.Entities;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {
@@ -59,7 +53,7 @@ namespace GymManagement.BLL.Services.Implmentations
         {
             var membership = await _unitOfWork.GetRepository<MemberShip>().GetByIdAsync(id);
 
-            if (membership is null || membership.Status == "Expired") 
+            if (membership is null || membership.Status == "Expired")
                 return false;
 
             _unitOfWork.GetRepository<MemberShip>().Delete(membership);

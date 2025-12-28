@@ -3,16 +3,8 @@ using GymManagement.BLL.Services.AttachmentService;
 using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.DAL.Entities;
-using GymManagement.DAL.Repositories.Implmentations;
-using GymManagement.DAL.Repositories.Interfaces;
 using GymManagement.DAL.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Implmentations
 {
@@ -31,7 +23,7 @@ namespace GymManagement.BLL.Services.Implmentations
 
         public async Task<IEnumerable<MemberViewModel>> GetAllMembersAsync()
         {
-            var members =  await _unitOfWork.GetRepository<Member>().GetAllQueryable().ToListAsync();
+            var members = await _unitOfWork.GetRepository<Member>().GetAllQueryable().ToListAsync();
             if (!members.Any())
                 return [];
 
@@ -48,13 +40,13 @@ namespace GymManagement.BLL.Services.Implmentations
 
             var viewModel = _mapper.Map<MemberWithDetailsViewModel>(member);
 
-            var activeMemberShip = await _unitOfWork.GetRepository<MemberShip>().GetAllQueryable(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefaultAsync();
+            var activeMemberShip = await _unitOfWork.GetRepository<MemberShip>().GetAllQueryable(ms => ms.MemberId == id && ms.EndDate >= DateTime.UtcNow).FirstOrDefaultAsync();
             if (activeMemberShip is not null)
             {
                 viewModel.MemberShipStartDate = activeMemberShip.CreatedAt.ToShortDateString();
                 viewModel.MemberShipEndDate = activeMemberShip.EndDate.ToShortDateString();
                 var plan = await _unitOfWork.GetRepository<Plan>().GetByIdAsync(activeMemberShip.PlanId);
-                viewModel.PlanName = plan?.Name;
+                viewModel.PlanName = plan?.Name!;
             }
 
             return viewModel;
@@ -139,7 +131,7 @@ namespace GymManagement.BLL.Services.Implmentations
                 var sessionIds = await _unitOfWork.GetRepository<MemberSession>()
                     .GetAllQueryable(ms => ms.MemberId == id).Select(ms => ms.SessionId).ToListAsync();
 
-                var hasActiveMemberSession =  await _unitOfWork.GetRepository<Session>()
+                var hasActiveMemberSession = await _unitOfWork.GetRepository<Session>()
                     .GetAllQueryable(s => sessionIds.Contains(s.Id) && s.StartDate > DateTime.Now).AnyAsync();
                 if (hasActiveMemberSession)
                     return false;
